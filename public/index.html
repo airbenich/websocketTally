@@ -1,0 +1,35 @@
+<html>
+	<head>
+		<title>Websocket Tally</title>
+		<style>
+		</style>
+	</head>
+
+	<body>
+		<h1>Websocket Tally</h1>
+
+		<ul>
+			<li><a href="#" onclick="request('/tally/preview')">Tally Preview</a>
+			<li><a href="#" onclick="request('/tally/program')">Tally Program</a>
+			<li><a href="#" onclick="request('/tally/transition')">Tally Transition</a>
+			<li><a href="#" onclick="request('/tally/off')">Tally Off</a>
+			<li><a href="#" onclick="request('/call')">Call</a>
+		</ul>
+
+		<script type="text/javascript">
+			function request(url) {
+				var xmlhttp = new XMLHttpRequest();
+			
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE == 4
+						console.log(xmlhttp.status);
+						console.log(xmlhttp.responseText);
+					}
+				};
+			
+				xmlhttp.open("GET", url, true);
+				xmlhttp.send();
+			}
+			</script>
+	</body>
+</html>
