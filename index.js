@@ -48,8 +48,9 @@ function setTallyProgram() {
 function setTallyPreview() {
   for (var i = 0; i < 8; i++) {
     led.morph(0, 255, 0, {
-      duration: 100,
+      duration: 50,
       index: i,
+      steps: 10
     });
   }
 }
@@ -77,7 +78,7 @@ function setLightOff() {
 function setCall() {
   for (var i = 0; i < 8; i++) {
     led.blink(255, 100, 0, {
-      repeats: 5,
+      repeats: 10,
       delay: 100,
       index: i,
     });
