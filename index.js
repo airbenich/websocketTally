@@ -1,12 +1,9 @@
 var blinkstick = require("blinkstick");
 var led = blinkstick.findFirst();
 
-setLightOff();
-turnOn();
-
 const express = require("express");
 const app = express();
-const port = 3000;
+const port = 3002;
 app.use(express.static(__dirname + "/public"));
 
 app.get("/tally/preview", function (req, res) {
@@ -85,16 +82,6 @@ function setCall() {
   }
 }
 
-function turnOn(params) {
-  for (var i = 0; i < 8; i++) {
-    led.blink(0, 255, 0, {
-      repeats: 3,
-      delay: 100,
-      index: i,
-    });
-  }
-}
-
 
 
 
@@ -105,8 +92,45 @@ function turnOn(params) {
 var io = require("socket.io-client");
 
 var CONFIG = {};
-CONFIG.host = "172.17.121.12";
+CONFIG.host = "localhost";
 CONFIG.port = 3000;
+var websocketConnectionAvailable = false;
+var lastWebsocketConnectionAvailable = false;
+var waitingForConnectionFrame = 0;
+setWatchdogForConnectionLoss();
+
+function setWatchdogForConnectionLoss() {
+    setInterval(() => {
+        if(websocketConnectionAvailable === true && lastWebsocketConnectionAvailable === false) {
+            // cnnection established
+            for (var i = 0; i < 8; i++) {
+                led.blink(0, 50, 0, {
+                    repeats: 3,
+                    delay: 150,
+                    index: i,
+                });
+            };
+        } else if (websocketConnectionAvailable === false && lastWebsocketConnectionAvailable === true) {
+            // connection lost
+            for (var i = 0; i < 8; i++) {
+                led.blink(50, 0, 0, {
+                    repeats: 3,
+                    delay: 150,
+                    index: i,
+                });
+            };
+        } else if(!websocketConnectionAvailable) {
+            // wait for connection
+            for (var i = 0; i < 1; i++) {
+                led.pulse(100, 50, 0, {
+                    duration:500,
+                    index: i,
+                });
+            };
+        }
+        lastWebsocketConnectionAvailable = websocketConnectionAvailable;
+    }, 2000);
+}
 
 // socket.io
 client = io.connect("http://" + CONFIG.host + ":" + CONFIG.port, {
@@ -115,13 +139,15 @@ client = io.connect("http://" + CONFIG.host + ":" + CONFIG.port, {
 
 // on connection
 client.on("connect", function () {
+    websocketConnectionAvailable = true;
   console.log(
     "Successfully connected to http://" + CONFIG.host + ":" + CONFIG.port
   );
 });
 
 // on disconnect
-client.on("disconnect", function () {
+client.on("disconnect", function (data) {
+    websocketConnectionAvailable = false;
   console.log("Lost connection to http://" + CONFIG.host + ":" + CONFIG.port);
 });
 
