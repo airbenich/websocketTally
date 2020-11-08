@@ -92,7 +92,7 @@ function setCall() {
 var io = require("socket.io-client");
 
 var CONFIG = {};
-CONFIG.host = "localhost";
+CONFIG.host = "172.17.121.12";
 CONFIG.port = 3000;
 var websocketConnectionAvailable = false;
 var lastWebsocketConnectionAvailable = false;
