@@ -122,7 +122,7 @@ function setWatchdogForConnectionLoss() {
                 });
             };
         } else if(!websocketConnectionAvailable) {
-          console.log('Wair for Connection');
+          console.log('Wait for Connection');
             // wait for connection
             for (var i = 0; i < 1; i++) {
                 led.pulse(100, 50, 0, {
@@ -136,7 +136,7 @@ function setWatchdogForConnectionLoss() {
 }
 
 // socket.io
-client = io.connect("http://" + CONFIG.host + ":" + CONFIG.port, {
+const client = io.connect("http://" + CONFIG.host + ":" + CONFIG.port, {
   query: "authentication=sDJZn16TuP7zu82a",
 });
 
