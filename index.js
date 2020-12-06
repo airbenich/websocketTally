@@ -102,7 +102,8 @@ setWatchdogForConnectionLoss();
 function setWatchdogForConnectionLoss() {
     setInterval(() => {
         if(websocketConnectionAvailable === true && lastWebsocketConnectionAvailable === false) {
-            // cnnection established
+          console.log('Connection established');
+            // connection established
             for (var i = 0; i < 8; i++) {
                 led.blink(0, 50, 0, {
                     repeats: 3,
@@ -111,6 +112,7 @@ function setWatchdogForConnectionLoss() {
                 });
             };
         } else if (websocketConnectionAvailable === false && lastWebsocketConnectionAvailable === true) {
+          console.log('Connection lost');
             // connection lost
             for (var i = 0; i < 8; i++) {
                 led.blink(50, 0, 0, {
@@ -120,6 +122,7 @@ function setWatchdogForConnectionLoss() {
                 });
             };
         } else if(!websocketConnectionAvailable) {
+          console.log('Wair for Connection');
             // wait for connection
             for (var i = 0; i < 1; i++) {
                 led.pulse(100, 50, 0, {
